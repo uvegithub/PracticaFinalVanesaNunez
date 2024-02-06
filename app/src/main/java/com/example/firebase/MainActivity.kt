@@ -48,9 +48,9 @@ class MainActivity : AppCompatActivity() {
 
     fun validacion(usuario_layaout:TextInputLayout, contrasenalayout: TextInputLayout, usuario_edit:TextInputEditText, contrasenaedit:TextInputEditText){
         //admin: login:admin  contra:admin   usuario  login:user   contrasena: user
-        if(usuario_edit.text.toString()=="admin" || contrasenaedit.text.toString()=="admin"){
+        if(usuario_edit.text.toString()=="admin" && contrasenaedit.text.toString()=="admin"){
             startActivity(intento)
-        }else if(usuario_edit.text.toString()=="user" || contrasenaedit.text.toString()=="user"){
+        }else if(usuario_edit.text.toString()=="user" && contrasenaedit.text.toString()=="user"){
             startActivity(intento)
         }else{
             if(usuario_edit.text.toString()==""){
