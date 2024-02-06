@@ -57,9 +57,9 @@ class MainActivity : AppCompatActivity() {
                 usuario_layaout.setError("Debe introducir el nombre de usuario")
             }else if(contrasenaedit.text.toString()==""){
                 contrasenalayout.setError("Debe introducir la contrasena")
-            }else if(usuario_edit.text.toString()=="admin" || usuario_edit.text.toString()=="user"){
+            }else if(usuario_edit.text.toString()!="admin" || usuario_edit.text.toString()!="user"){
                 usuario_layaout.setError("Nombre de usuario incorrecto")
-            }else if(contrasenaedit.text.toString()=="admin"|| contrasenaedit.text.toString()=="user"){
+            }else if(contrasenaedit.text.toString()!="admin"|| contrasenaedit.text.toString()!="user"){
                 contrasenalayout.setError("Contrasena incorrecta")
             }
         }
