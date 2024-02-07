@@ -1,9 +1,12 @@
 package com.example.firebase
 
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.widget.Button
+import androidx.core.content.edit
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.FirebaseDatabase
@@ -18,6 +21,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var contrasena_edit: TextInputEditText
     lateinit var boton_registro: Button
     lateinit var intento_registro: Intent
+
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,14 +49,22 @@ class MainActivity : AppCompatActivity() {
         boton_registro.setOnClickListener {
             startActivity(intento_registro)
         }
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
     }
 
     fun validacion(usuario_layaout:TextInputLayout, contrasenalayout: TextInputLayout, usuario_edit:TextInputEditText, contrasenaedit:TextInputEditText){
         //admin: login:admin  contra:admin   usuario  login:user   contrasena: user
         if(usuario_edit.text.toString()=="admin" && contrasenaedit.text.toString()=="admin"){
             startActivity(intento)
+            sharedPreferences.edit {
+                putString("usuario","administrador")
+            }
         }else if(usuario_edit.text.toString()=="user" && contrasenaedit.text.toString()=="user"){
             startActivity(intento)
+            sharedPreferences.edit {
+                putString("usuario","cliente")
+            }
         }else{
             if(usuario_edit.text.toString()==""){
                 usuario_layaout.setError("Debe introducir el nombre de usuario")
