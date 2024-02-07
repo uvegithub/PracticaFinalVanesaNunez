@@ -9,4 +9,6 @@ data class Usuario(
     var login: String? = null,
     var password: String? = null,
     var tipo:String? = null,
+    var estado_notificacion:Int? = null,
+    var user_notificacion:String? = null,
 ): Parcelable

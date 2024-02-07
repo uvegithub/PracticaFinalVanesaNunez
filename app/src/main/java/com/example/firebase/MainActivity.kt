@@ -65,7 +65,8 @@ class MainActivity : AppCompatActivity() {
             sharedPreferences.edit {
                 putString("usuario","cliente")
             }
-        }else{
+        }
+        else{
             if(usuario_edit.text.toString()==""){
                 usuario_layaout.setError("Debe introducir el nombre de usuario")
             }else if(contrasenaedit.text.toString()==""){
