@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class Carta(
     var id : String? = null,
     var nombre: String? = null,
-    var precio: String? = null,
+    var precio: Float? = null,
     var disponible:String? = null,
     var categoria:String? = null,
     var imagen: String? = null,

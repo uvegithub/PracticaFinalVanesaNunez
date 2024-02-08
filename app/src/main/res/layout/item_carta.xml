@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="10dp"
+    android:layout_marginHorizontal="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp">
+
+            <ImageView
+                android:id="@+id/item_miniatura"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/cm1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/nombre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/item_miniatura"
+                android:text="nombre"
+                android:textSize="16sp"
+                android:textStyle="bold">
+
+            </TextView>
+
+        <TextView
+            android:id="@+id/precio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nombre"
+            android:text="precio"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/categoria"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/precio"
+            android:text="categoria"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/disponibilidad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/categoria"
+            android:text="disponibilidad"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/puntos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/disponibilidad"
+            android:text="puntos"
+            android:textSize="16sp" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
