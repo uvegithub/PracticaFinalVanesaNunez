@@ -49,12 +49,14 @@ class MainActivity : AppCompatActivity() {
         boton_registro.setOnClickListener {
             startActivity(intento_registro)
         }
-
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
     }
 
     fun validacion(usuario_layaout:TextInputLayout, contrasenalayout: TextInputLayout, usuario_edit:TextInputEditText, contrasenaedit:TextInputEditText){
         //admin: login:admin  contra:admin   usuario  login:user   contrasena: user
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        var usuario_registrado = sharedPreferences.getString("login_"+user_edit.text.toString().trim(),usuario_edit.text.toString().trim())
+        var contrasena_registrado = sharedPreferences.getString("password_"+user_edit.text.toString().trim(),contrasenaedit.text.toString().trim())
+
         if(usuario_edit.text.toString()=="admin" && contrasenaedit.text.toString()=="admin"){
             startActivity(intento)
             sharedPreferences.edit {
@@ -75,6 +77,11 @@ class MainActivity : AppCompatActivity() {
                 usuario_layaout.setError("Nombre de usuario incorrecto")
             }else if(contrasenaedit.text.toString()!="admin"|| contrasenaedit.text.toString()!="user"){
                 contrasenalayout.setError("Contrasena incorrecta")
+            }else if(usuario_edit.text.toString()==usuario_registrado && contrasenaedit.text.toString()==contrasena_registrado){
+                startActivity(intento)
+                sharedPreferences.edit {
+                    putString("usuario","cliente")
+                }
             }
         }
     }
