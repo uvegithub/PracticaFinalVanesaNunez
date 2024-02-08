@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.database.DataSnapshot
@@ -108,23 +109,23 @@ class Utilidades {
             }
         }
 
-//        fun animacion_carga(contexto: Context): CircularProgressDrawable {
-//            val animacion = CircularProgressDrawable(contexto)
-//            animacion.strokeWidth = 5f
-//            animacion.centerRadius = 30f
-//            animacion.start()
-//            return animacion
-//        }
+        fun animacion_carga(contexto: Context): CircularProgressDrawable {
+            val animacion = CircularProgressDrawable(contexto)
+            animacion.strokeWidth = 5f
+            animacion.centerRadius = 30f
+            animacion.start()
+            return animacion
+        }
 
 
-//        val transicion = DrawableTransitionOptions.withCrossFade(500)
-//
-//        fun opcionesGlide(context: Context): RequestOptions {
-//            val options = RequestOptions()
-//                .placeholder(animacion_carga(context))
-//                .fallback(R.drawable.hogwartscrest)
-//                .error(R.drawable.kisspng_http_404_computer_icons_clip_art_5afe161a542093_5617268715266012423446)
-//            return options
-//        }
+        val transicion = DrawableTransitionOptions.withCrossFade(500)
+
+        fun opcionesGlide(context: Context): RequestOptions {
+            val options = RequestOptions()
+                .placeholder(animacion_carga(context))
+                .fallback(R.drawable.cm1)
+                .error(R.drawable.error)
+            return options
+        }
     }
 }
