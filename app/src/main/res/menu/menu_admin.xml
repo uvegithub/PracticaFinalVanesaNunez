@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/accion_ver_cartas"
+        android:title="Catalogo"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/accion_crear_cartas"
+        android:title="Añadir articulo"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/accion_editar_cartas"
+        android:title="Modificar articulo"
+        app:showAsAction="never"
+        />
+
+</menu>

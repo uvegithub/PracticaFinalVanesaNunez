@@ -102,7 +102,7 @@ class Registro_usuarios : AppCompatActivity(), CoroutineScope {
                         putString("password_"+user_edit.text.toString().trim(), contrasena_edit.text.toString().trim())
                     }
 
-                    val activity = Intent(applicationContext, MainActivity::class.java)
+                    val activity = Intent(applicationContext, Ver_cartas::class.java)
                     startActivity(activity)
                 }
 

@@ -43,8 +43,8 @@ class MainActivity : AppCompatActivity() {
             validacion(user_layout, contrasena_layout, user_edit, contrasena_edit)
         }
 
-        intento = Intent(this, MainActivity::class.java)
-        intento_registro = Intent(this, MainActivity::class.java)
+        intento = Intent(this, Ver_cartas::class.java)
+        intento_registro = Intent(this, Registro_usuarios::class.java)
 
         boton_registro.setOnClickListener {
             startActivity(intento_registro)

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Editar_carta">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:srcCompat="@drawable/cm1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginVertical="10dp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textinputlayoutNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="50dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/blue"
+                android:hint="Nombre"
+                app:boxBackgroundColor="#C4B7DC"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageView">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textinputedittextuNombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:textSize="14sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textinputlayoutPrecio"
+                app:layout_constraintTop_toBottomOf="@id/textinputlayoutNombre"
+                app:layout_constraintStart_toStartOf="parent"
+                app:boxBackgroundColor="#C4B7DC"
+                android:hint="Precio"
+                android:layout_marginHorizontal="50dp"
+                android:layout_marginVertical="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:textSize="14sp"
+                    android:id="@+id/textinputedittextPrecio"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textinputlayoutDisponibilidad"
+                app:layout_constraintTop_toBottomOf="@id/textinputlayoutPrecio"
+                app:layout_constraintStart_toStartOf="parent"
+                app:boxBackgroundColor="#C4B7DC"
+                android:hint="Disponiblidad"
+                android:layout_marginHorizontal="50dp"
+                android:layout_marginVertical="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:textSize="14sp"
+                    android:id="@+id/textinputedittextDisponibilidad"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textinputlayoutCategoria"
+                app:layout_constraintTop_toBottomOf="@id/textinputlayoutDisponibilidad"
+                app:layout_constraintStart_toStartOf="parent"
+                app:boxBackgroundColor="#C4B7DC"
+                android:hint="Categoria"
+                android:layout_marginHorizontal="50dp"
+                android:layout_marginVertical="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:textSize="14sp"
+                    android:id="@+id/textinputedittextCategoria"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Editar"
+                app:layout_constraintTop_toBottomOf="@+id/textinputlayoutCategoria"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/button_volver"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="#C4B7DC"
+                />
+
+            <Button
+                android:id="@+id/button_volver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Volver"
+                app:layout_constraintTop_toBottomOf="@+id/button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="#C4B7DC"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
