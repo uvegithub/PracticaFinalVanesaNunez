@@ -56,6 +56,10 @@ class Editar_carta : AppCompatActivity(), CoroutineScope {
         precio=findViewById(R.id.textinputedittextPrecio)
         disponibilidad=findViewById(R.id.textinputedittextDisponibilidad)
         categoria=findViewById(R.id.textinputedittextCategoria)
+        imagen=findViewById(R.id.imageView)
+
+        beditar=findViewById(R.id.button)
+        bvolver=findViewById(R.id.button_volver)
 
         nombre.setText(pojo_carta.nombre)
         precio.setText(pojo_carta.precio.toString())

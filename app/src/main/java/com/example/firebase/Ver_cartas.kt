@@ -24,7 +24,7 @@ class Ver_cartas : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
-        if(rol_usuario == "admin"){
+        if(rol_usuario == "administrador"){
             menuInflater.inflate(R.menu.menu_admin, menu)
         }else{
             menuInflater.inflate(R.menu.menu_user, menu)
@@ -33,15 +33,19 @@ class Ver_cartas : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.accion_ver_cartas){
-            val intent = Intent(this, Ver_cartas::class.java)
-            startActivity(intent)
-        }else if(item.itemId == R.id.accion_crear_cartas){
-            val intent = Intent(this, Crear_carta::class.java)
-            startActivity(intent)
-        }else if(item.itemId == R.id.accion_editar_cartas){
-            val intent = Intent(this, Editar_carta::class.java)
-            startActivity(intent)
+        when (item.itemId) {
+            R.id.accion_ver_cartas -> {
+                val intent = Intent(this, Ver_cartas::class.java)
+                startActivity(intent)
+            }
+            R.id.accion_crear_cartas -> {
+                val intent2 = Intent(this, Crear_carta::class.java)
+                startActivity(intent2)
+            }
+            R.id.accion_editar_cartas -> {
+                val intent3 = Intent(this, Editar_carta::class.java)
+                startActivity(intent3)
+            }
         }
         return super.onOptionsItemSelected(item)
     }

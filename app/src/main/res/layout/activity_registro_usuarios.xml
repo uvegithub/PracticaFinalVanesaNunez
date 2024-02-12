@@ -36,6 +36,7 @@
         android:id="@+id/textinputlayoutUsuario"
         app:layout_constraintTop_toBottomOf="@id/logo"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textinputlayoutContrasena"
         android:hint="Nombre de usuario"
         android:layout_marginHorizontal="50dp"
         android:layout_marginTop="100dp">

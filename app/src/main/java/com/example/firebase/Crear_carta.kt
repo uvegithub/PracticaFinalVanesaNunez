@@ -50,10 +50,14 @@ class Crear_carta : AppCompatActivity(), CoroutineScope {
         precio=findViewById(R.id.textinputedittextPrecio)
         disponibilidad=findViewById(R.id.textinputedittextDisponibilidad)
         categoria=findViewById(R.id.textinputedittextCategoria)
+        bcrear=findViewById(R.id.button)
+        bvolver=findViewById(R.id.button_volver)
+        imagen=findViewById(R.id.imageView)
 
         database_ref = FirebaseDatabase.getInstance().getReference()
         storage_ref = FirebaseStorage.getInstance().getReference()
         lista_cartas = Utilidades.obtenerListaCartas(database_ref)
+
 
         bcrear.setOnClickListener {
 
