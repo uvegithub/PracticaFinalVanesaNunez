@@ -8,7 +8,16 @@ import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ImageView
+import android.widget.Spinner
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class Ver_cartas : AppCompatActivity() {
 
@@ -17,6 +26,13 @@ class Ver_cartas : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
 
     private lateinit var imagen_cesta:ImageView
+
+    private lateinit var recycler: RecyclerView
+    private  lateinit var lista:MutableList<Carta>
+    private lateinit var adaptador: CartaAdaptador
+    private lateinit var db_ref: DatabaseReference
+
+    private lateinit var spinner: Spinner
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ver_cartas)
@@ -33,6 +49,52 @@ class Ver_cartas : AppCompatActivity() {
         }
 
         imagen_cesta.setOnClickListener {
+            val activity = Intent(applicationContext, MainActivity::class.java)
+            startActivity(activity)
+        }
+
+        spinner= findViewById(R.id.filtro)
+
+        val items = resources.getStringArray(R.array.spinner_items)
+
+        lista = mutableListOf()
+        db_ref = FirebaseDatabase.getInstance().getReference()
+
+        db_ref.child("tienda")
+            .child("cartas")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    lista.clear()
+                    snapshot.children.forEach{hijo: DataSnapshot?
+                        ->
+                        val pojo_carta = hijo?.getValue(Carta::class.java)
+                        lista.add(pojo_carta!!)
+                    }
+                    recycler.adapter?.notifyDataSetChanged()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    println(error.message)
+                }
+
+            })
+
+        adaptador = CartaAdaptador(lista)
+        recycler = findViewById(R.id.lista_cartas)
+        recycler.adapter = adaptador
+        recycler.layoutManager = LinearLayoutManager(applicationContext)
+        recycler.setHasFixedSize(true)
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
+                val item_seleccionado = items[position]
+                lista.filter { it.categoria==item_seleccionado }
+                recycler.adapter?.notifyDataSetChanged()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
 
         }
 

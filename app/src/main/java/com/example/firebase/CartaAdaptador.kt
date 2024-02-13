@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 
-class CartaAdaptador (var lista_cartas: MutableList<Carta>, private val listener: View.OnClickListener):
+class CartaAdaptador (var lista_cartas: MutableList<Carta>):
     RecyclerView.Adapter<CartaAdaptador.CartaViewHolder>(), Filterable {
     private lateinit var contexto: Context
     private var lista_filtrada = lista_cartas
