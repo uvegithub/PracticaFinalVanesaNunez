@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.widget.Button
 import androidx.core.content.edit
 import com.google.android.material.textfield.TextInputEditText
@@ -56,31 +57,32 @@ class MainActivity : AppCompatActivity() {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         var usuario_registrado = sharedPreferences.getString("login_"+user_edit.text.toString().trim(),usuario_edit.text.toString().trim())
         var contrasena_registrado = sharedPreferences.getString("password_"+user_edit.text.toString().trim(),contrasenaedit.text.toString().trim())
+        Log.d("USER:", usuario_registrado.toString())
+        Log.d("PASSWORD:", contrasena_registrado.toString())
 
         if(usuario_edit.text.toString()=="admin" && contrasenaedit.text.toString()=="admin"){
             startActivity(intento)
             sharedPreferences.edit {
-                putString("usuario","administrador")
+                putString("usuario", "administrador")
             }
         }else if(usuario_edit.text.toString()=="user" && contrasenaedit.text.toString()=="user"){
             startActivity(intento)
             sharedPreferences.edit {
                 putString("usuario","cliente")
             }
-        }
-        else{
+        }else {
             if(usuario_edit.text.toString()==""){
                 usuario_layaout.setError("Debe introducir el nombre de usuario")
             }else if(contrasenaedit.text.toString()==""){
                 contrasenalayout.setError("Debe introducir la contrasena")
-            }else if(usuario_edit.text.toString()!="admin" || usuario_edit.text.toString()!="user"){
+            }else if(usuario_edit.text.toString()!="admin" || usuario_edit.text.toString()!="user" || usuario_edit.text.toString()!=usuario_registrado){
                 usuario_layaout.setError("Nombre de usuario incorrecto")
-            }else if(contrasenaedit.text.toString()!="admin"|| contrasenaedit.text.toString()!="user"){
+            }else if(contrasenaedit.text.toString()!="admin" || contrasenaedit.text.toString()!="user" || contrasenaedit.text.toString()!=contrasena_registrado){
                 contrasenalayout.setError("Contrasena incorrecta")
-            }else if(usuario_edit.text.toString()==usuario_registrado && contrasenaedit.text.toString()==contrasena_registrado){
+            }else if(usuario_edit.text.toString()==usuario_registrado && contrasenaedit.text.toString()==contrasena_registrado) {
                 startActivity(intento)
                 sharedPreferences.edit {
-                    putString("usuario","cliente")
+                putString("usuario", "cliente")
                 }
             }
         }

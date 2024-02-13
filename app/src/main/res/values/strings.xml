@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">firebase</string>
+    <string name="app_name">tienda</string>
+    <array name="spinner_items">
+        <item>Blanco</item>
+        <item>Negro</item>
+        <item>Azul</item>
+        <item>Rojo</item>
+        <item>Verde</item>
+        <item>Todas las categorias</item>
+    </array>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.firebase
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
@@ -96,15 +97,21 @@ class Registro_usuarios : AppCompatActivity(), CoroutineScope {
                         "Nuevo usuario registrado con exito"
                     )
 
-                    sharedPreferences.edit {
-                        putString("usuario","cliente")
-                        putString("login_"+user_edit.text.toString().trim(),user_edit.text.toString().trim())
-                        putString("password_"+user_edit.text.toString().trim(), contrasena_edit.text.toString().trim())
-                    }
+                    sharedPreferences.edit().putString("usuario","cliente").apply()
+                    sharedPreferences.edit().putString("login_"+user_edit.text.toString().trim(),user_edit.text.toString().trim()).apply()
+                    sharedPreferences.edit().putString("password_"+user_edit.text.toString().trim(), contrasena_edit.text.toString().trim()).apply()
+
+
 
                     val activity = Intent(applicationContext, Ver_cartas::class.java)
                     startActivity(activity)
                 }
+
+
+
+
+
+
 
             }
         }

@@ -2,6 +2,9 @@ package com.example.firebase
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.graphics.drawable.Drawable
+import android.preference.PreferenceManager
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +23,11 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>, private val listener
     RecyclerView.Adapter<CartaAdaptador.CartaViewHolder>(), Filterable {
     private lateinit var contexto: Context
     private var lista_filtrada = lista_cartas
+
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var rol_usuario: String
+
+
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -48,10 +56,26 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>, private val listener
             .transition(Utilidades.transicion)
             .into(holder.miniatura)
 
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(contexto)
+        rol_usuario = sharedPreferences.getString("usuario", "administrador").toString()
+
+        if(rol_usuario=="cliente"){
+            holder.imagen_comprar.setVisibility(View.VISIBLE)
+            holder.editar.setVisibility(View.INVISIBLE)
+        }else{
+            holder.imagen_comprar.setVisibility(View.INVISIBLE)
+            holder.editar.setVisibility(View.VISIBLE)
+        }
+
         holder.editar.setOnClickListener {
             val activity = Intent(contexto,Editar_carta::class.java)
             activity.putExtra("cartas", item_actual)
             contexto.startActivity(activity)
+        }
+
+        holder.imagen_comprar.setOnClickListener {
+            val activity = Intent(contexto,Mi_cesta::class.java)
+            activity.putExtra("cartas", item_actual)
         }
 
 //        holder.eliminar.setOnClickListener {
@@ -82,6 +106,8 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>, private val listener
         val categoria: TextView = itemView.findViewById(R.id.categoria)
         val disponibilidad: TextView = itemView.findViewById(R.id.disponibilidad)
         val editar: ImageView = itemView.findViewById(R.id.editar)
+
+        var imagen_comprar: ImageView = itemView.findViewById(R.id.comprar)
     }
 
     override fun getFilter(): Filter {
