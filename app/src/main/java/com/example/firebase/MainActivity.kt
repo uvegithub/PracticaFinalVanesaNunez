@@ -54,9 +54,11 @@ class MainActivity : AppCompatActivity() {
 
     fun validacion(usuario_layaout:TextInputLayout, contrasenalayout: TextInputLayout, usuario_edit:TextInputEditText, contrasenaedit:TextInputEditText){
         //admin: login:admin  contra:admin   usuario  login:user   contrasena: user
+
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        var usuario_registrado = sharedPreferences.getString("login_"+user_edit.text.toString().trim(),usuario_edit.text.toString().trim())
-        var contrasena_registrado = sharedPreferences.getString("password_"+user_edit.text.toString().trim(),contrasenaedit.text.toString().trim())
+        Log.v("log","login_"+user_edit.text.toString().trim())
+        var usuario_registrado = sharedPreferences.getString("login_"+user_edit.text.toString().trim(),"")
+        var contrasena_registrado = sharedPreferences.getString("password_"+user_edit.text.toString().trim(),"")
         Log.d("USER:", usuario_registrado.toString())
         Log.d("PASSWORD:", contrasena_registrado.toString())
 
@@ -71,15 +73,22 @@ class MainActivity : AppCompatActivity() {
                 putString("usuario","cliente")
             }
         }else {
+            Log.v("Contrasenia",contrasenaedit.text.toString())
+            Log.v("log",(usuario_edit.text.toString()))
+
             if(usuario_edit.text.toString()==""){
                 usuario_layaout.setError("Debe introducir el nombre de usuario")
             }else if(contrasenaedit.text.toString()==""){
                 contrasenalayout.setError("Debe introducir la contrasena")
-            }else if(usuario_edit.text.toString()!="admin" || usuario_edit.text.toString()!="user" || usuario_edit.text.toString()!=usuario_registrado){
+            }
+
+            else if(usuario_edit.text.toString()!=usuario_registrado){
                 usuario_layaout.setError("Nombre de usuario incorrecto")
-            }else if(contrasenaedit.text.toString()!="admin" || contrasenaedit.text.toString()!="user" || contrasenaedit.text.toString()!=contrasena_registrado){
+            }
+            else if(contrasenaedit.text.toString()!=contrasena_registrado){
                 contrasenalayout.setError("Contrasena incorrecta")
-            }else if(usuario_edit.text.toString()==usuario_registrado && contrasenaedit.text.toString()==contrasena_registrado) {
+            }
+            else if(usuario_edit.text.toString()==usuario_registrado && contrasenaedit.text.toString()==contrasena_registrado) {
                 startActivity(intento)
                 sharedPreferences.edit {
                 putString("usuario", "cliente")

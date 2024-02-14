@@ -28,8 +28,8 @@ class Registro_usuarios : AppCompatActivity(), CoroutineScope {
     lateinit var contrasena_layout: TextInputLayout
     lateinit var boton_ingresar: Button
     lateinit var intento: Intent
-    lateinit var user_edit: TextInputEditText
-    lateinit var contrasena_edit: TextInputEditText
+    lateinit var user_edit2: TextInputEditText
+    lateinit var contrasena_edit2: TextInputEditText
 
     private lateinit var sharedPreferences: SharedPreferences
 
@@ -45,8 +45,8 @@ class Registro_usuarios : AppCompatActivity(), CoroutineScope {
 
         user_layout=findViewById(R.id.textinputlayoutUsuario)
         contrasena_layout=findViewById(R.id.textinputlayoutContrasena)
-        user_edit=findViewById(R.id.textinputedittextusuario)
-        contrasena_edit=findViewById(R.id.textinputedittextcontrasena)
+        user_edit2=findViewById(R.id.textinputedittextusuario2)
+        contrasena_edit2=findViewById(R.id.textinputedittextcontrasena2)
         boton_ingresar=findViewById(R.id.button)
 
         val this_activity = this
@@ -63,15 +63,15 @@ class Registro_usuarios : AppCompatActivity(), CoroutineScope {
 //            val dateTime = LocalDateTime.now()
 //                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
-            if (user_edit.text.toString().trim().isEmpty() ||
-                contrasena_edit.text.toString().trim().isEmpty()
+            if (user_edit2.text.toString().trim().isEmpty() ||
+                contrasena_edit2.text.toString().trim().isEmpty()
             ) {
                 Toast.makeText(
                     applicationContext, "Faltan datos en el " +
                             "formulario", Toast.LENGTH_SHORT
                 ).show()
 
-            } else if (Utilidades.existeCliente(lista_clientes, user_edit.text.toString().trim())) {
+            } else if (Utilidades.existeCliente(lista_clientes, user_edit2.text.toString().trim())) {
                 Toast.makeText(applicationContext, "Ese usuario ya existe", Toast.LENGTH_SHORT)
                     .show()
             } else {
@@ -85,8 +85,8 @@ class Registro_usuarios : AppCompatActivity(), CoroutineScope {
 
                     Utilidades.escribirCliente(
                         database_ref, id_generado!!,
-                        user_edit.text.toString().trim(),
-                        contrasena_edit.text.toString().trim(),
+                        user_edit2.text.toString().trim(),
+                        contrasena_edit2.text.toString().trim(),
                         "cliente",
                         Estado.CREADO,
                         androidId)
@@ -98,8 +98,8 @@ class Registro_usuarios : AppCompatActivity(), CoroutineScope {
                     )
 
                     sharedPreferences.edit().putString("usuario","cliente").apply()
-                    sharedPreferences.edit().putString("login_"+user_edit.text.toString().trim(),user_edit.text.toString().trim()).apply()
-                    sharedPreferences.edit().putString("password_"+user_edit.text.toString().trim(), contrasena_edit.text.toString().trim()).apply()
+                    sharedPreferences.edit().putString("login_"+user_edit2.text.toString().trim(),user_edit2.text.toString().trim()).apply()
+                    sharedPreferences.edit().putString("password_"+user_edit2.text.toString().trim(), contrasena_edit2.text.toString().trim()).apply()
 
 
 
