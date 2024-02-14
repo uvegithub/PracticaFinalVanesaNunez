@@ -42,7 +42,7 @@ class Mi_cesta : AppCompatActivity() {
                     lista.clear()
                     snapshot.children.forEach{hijo: DataSnapshot?
                         ->
-                        val pojo_carta = intent.getParcelableExtra<Carta>("casas")!!
+                        val pojo_carta = intent.getParcelableExtra<Carta>("carta_comprada")!!
                         lista.add(pojo_carta!!)
                     }
                     recycler.adapter?.notifyDataSetChanged()

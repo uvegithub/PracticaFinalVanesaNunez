@@ -90,10 +90,13 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
         }
 
         holder.imagen_comprar.setOnClickListener {
-            mostrar_notificacion(contexto)
-            val activity = Intent(contexto,Mi_cesta::class.java)
-            activity.putExtra("cartas", item_actual)
-            sharedPreferences.edit().putString("disponibilidad","No disponible").apply()
+            if(holder.disponibilidad.text!="No disponible"){
+                mostrar_notificacion(contexto)
+                val activity = Intent(contexto,Mi_cesta::class.java)
+                activity.putExtra("carta_comprada", item_actual)
+                sharedPreferences.edit().putString("disponibilidad","No disponible").apply()
+            }
+
         }
 
 //        holder.eliminar.setOnClickListener {
