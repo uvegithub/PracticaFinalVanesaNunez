@@ -49,8 +49,8 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
         val item_actual = lista_filtrada[position]
         holder.nombre.text = item_actual.nombre
         holder.precio.text = item_actual.precio.toString()
-        holder.categoria.text = item_actual.nombre
-        holder.disponibilidad.text = item_actual.nombre
+        holder.categoria.text = item_actual.categoria
+        holder.disponibilidad.text = sharedPreferences.getString("disponibilidad",item_actual.disponible)
 
         var euro=item_actual.precio
         var dolar:Float = euro!!.toFloat() * 1.07f
@@ -91,6 +91,7 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
             mostrar_notificacion(contexto)
             val activity = Intent(contexto,Mi_cesta::class.java)
             activity.putExtra("cartas", item_actual)
+            sharedPreferences.edit().putString("disponibilidad","No disponible").apply()
         }
 
 //        holder.eliminar.setOnClickListener {
