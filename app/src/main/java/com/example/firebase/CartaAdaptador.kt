@@ -1,19 +1,26 @@
 package com.example.firebase
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.preference.PreferenceManager
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.content.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.database.FirebaseDatabase
@@ -27,7 +34,7 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var rol_usuario: String
 
-
+    var canalId:Int = 0
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -44,6 +51,13 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
         holder.precio.text = item_actual.precio.toString()
         holder.categoria.text = item_actual.nombre
         holder.disponibilidad.text = item_actual.nombre
+
+        var euro=item_actual.precio
+        var dolar:Float = euro!!.toFloat() * 1.07f
+
+        if(holder.dolares.isChecked){
+            holder.precio.text = dolar.toString()
+        }
 
         val URL:String? = when(item_actual.imagen){
             ""-> null
@@ -74,6 +88,7 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
         }
 
         holder.imagen_comprar.setOnClickListener {
+            mostrar_notificacion(contexto)
             val activity = Intent(contexto,Mi_cesta::class.java)
             activity.putExtra("cartas", item_actual)
         }
@@ -108,6 +123,8 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
         val editar: ImageView = itemView.findViewById(R.id.editar)
 
         var imagen_comprar: ImageView = itemView.findViewById(R.id.comprar)
+
+        var dolares:CheckBox = itemView.findViewById(R.id.checkBox)
     }
 
     override fun getFilter(): Filter {
@@ -131,6 +148,32 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
                 notifyDataSetChanged()
             }
 
+        }
+    }
+
+    fun mostrar_notificacion(contexto: Context){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            canalId += 1
+            var canalNombre = "canal" + canalId.toString()
+            val notificationChannel = NotificationChannel(canalId.toString(), canalNombre, NotificationManager.IMPORTANCE_DEFAULT)
+            contexto.getSystemService<NotificationManager>()?.createNotificationChannel(notificationChannel)
+        }
+
+//        val intento = Intent(contexto, MainActivity::class.java)
+//        val pendingIntent = PendingIntent.getActivity(contexto, 0, intento, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val intento_boton = Intent(contexto, Mi_cesta::class.java)
+        val pendingIntent_boton = PendingIntent.getActivity(contexto, 0, intento_boton, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        val builder = NotificationCompat.Builder(contexto, canalId.toString())
+            .setSmallIcon(R.drawable.notification_icon_124899)
+            .setContentTitle("Notificacion")
+            .setContentText("Has comprado la carta. Mi id es "+canalId)
+//            .setContentIntent(pendingIntent)
+            .addAction(R.drawable.notification_icon_124899,"Ir a mi cesta", pendingIntent_boton)
+
+        with(contexto.getSystemService<NotificationManager>()){
+            this?.notify(1,builder.build())
         }
     }
 }

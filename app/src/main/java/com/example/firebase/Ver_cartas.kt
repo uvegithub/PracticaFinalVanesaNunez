@@ -82,7 +82,7 @@ class Ver_cartas : AppCompatActivity() {
         adaptador = CartaAdaptador(lista)
         recycler = findViewById(R.id.lista_cartas)
         recycler.adapter = adaptador
-        recycler.layoutManager = LinearLayoutManager(applicationContext)
+        recycler.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
         recycler.setHasFixedSize(true)
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
