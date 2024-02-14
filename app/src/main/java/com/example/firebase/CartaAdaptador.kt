@@ -46,6 +46,8 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
     }
 
     override fun onBindViewHolder(holder: CartaAdaptador.CartaViewHolder, position: Int) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(contexto)
+
         val item_actual = lista_filtrada[position]
         holder.nombre.text = item_actual.nombre
         holder.precio.text = item_actual.precio.toString()
@@ -70,7 +72,7 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
             .transition(Utilidades.transicion)
             .into(holder.miniatura)
 
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(contexto)
+
         rol_usuario = sharedPreferences.getString("usuario", "administrador").toString()
 
         if(rol_usuario=="cliente"){

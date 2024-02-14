@@ -9,6 +9,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,6 +35,9 @@ class Ver_cartas : AppCompatActivity() {
     private lateinit var db_ref: DatabaseReference
 
     private lateinit var spinner: Spinner
+
+    private lateinit var busqueda:EditText
+    private lateinit var boton_busqueda:Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ver_cartas)
@@ -49,7 +54,7 @@ class Ver_cartas : AppCompatActivity() {
         }
 
         imagen_cesta.setOnClickListener {
-            val activity = Intent(applicationContext, MainActivity::class.java)
+            val activity = Intent(applicationContext, Mi_cesta::class.java)
             startActivity(activity)
         }
 
@@ -95,7 +100,16 @@ class Ver_cartas : AppCompatActivity() {
             override fun onNothingSelected(p0: AdapterView<*>?) {
 
             }
+        }
 
+        busqueda=findViewById(R.id.textinputedittextNombre)
+        boton_busqueda=findViewById(R.id.button)
+
+        boton_busqueda.setOnClickListener {
+            if(busqueda.toString()!=""){
+                lista.filter { it.nombre!!.equals(busqueda.toString(), ignoreCase = true) }
+                recycler.adapter?.notifyDataSetChanged()
+            }
         }
 
     }
@@ -120,10 +134,10 @@ class Ver_cartas : AppCompatActivity() {
                 val intent2 = Intent(this, Crear_carta::class.java)
                 startActivity(intent2)
             }
-            R.id.accion_editar_cartas -> {
-                val intent3 = Intent(this, Editar_carta::class.java)
-                startActivity(intent3)
-            }
+//            R.id.accion_editar_cartas -> {
+//                val intent3 = Intent(this, Editar_carta::class.java)
+//                startActivity(intent3)
+//            }
         }
         return super.onOptionsItemSelected(item)
     }
