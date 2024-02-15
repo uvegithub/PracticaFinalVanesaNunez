@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -92,8 +93,10 @@ class Ver_cartas : AppCompatActivity() {
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
-                val item_seleccionado = items[position]
-                lista.filter { it.categoria==item_seleccionado }
+//                val item_seleccionado = items[position]
+//                lista.filter { it.categoria==item_seleccionado }
+//                lista.retainAll { it.categoria==item_seleccionado }
+
                 recycler.adapter?.notifyDataSetChanged()
             }
 
@@ -107,7 +110,13 @@ class Ver_cartas : AppCompatActivity() {
 
         boton_busqueda.setOnClickListener {
             if(busqueda.toString()!=""){
-                lista.filter { it.nombre!!.equals(busqueda.toString(), ignoreCase = true) }
+                Log.v("lista", lista.toString())
+                lista.retainAll{
+                    Log.v("tag",busqueda.toString())
+                    Log.v("tag", it.nombre.toString())
+                    it.nombre!!.contains(busqueda.text.toString(), ignoreCase = true)
+                }
+                Log.v("lista", lista.toString())
                 recycler.adapter?.notifyDataSetChanged()
             }
         }

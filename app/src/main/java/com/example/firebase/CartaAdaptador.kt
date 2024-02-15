@@ -95,6 +95,10 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
                 val activity = Intent(contexto,Mi_cesta::class.java)
                 activity.putExtra("carta_comprada", item_actual)
                 sharedPreferences.edit().putString("disponibilidad","No disponible").apply()
+
+                //Introducimos el item carta en carta_compradas de la BD
+
+
             }
 
         }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,6 +44,7 @@ class Mi_cesta : AppCompatActivity() {
                     snapshot.children.forEach{hijo: DataSnapshot?
                         ->
                         val pojo_carta = intent.getParcelableExtra<Carta>("carta_comprada")!!
+                        Log.v("carta", pojo_carta.toString())
                         lista.add(pojo_carta!!)
                     }
                     recycler.adapter?.notifyDataSetChanged()
