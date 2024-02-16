@@ -16,5 +16,10 @@
         android:title="Modificar articulo"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/accion_aceptar_compra"
+        android:title="Aceptar compra"
+        app:showAsAction="never"
+        />
 
 </menu>

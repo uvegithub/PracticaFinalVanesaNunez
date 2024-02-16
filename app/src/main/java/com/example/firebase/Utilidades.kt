@@ -68,12 +68,44 @@ class Utilidades {
             return lista_cartas
         }
 
+        fun obtenerListaCartasReservadas(database_ref: DatabaseReference):MutableList<CartaReservada>{
+            var lista_cartas = mutableListOf<CartaReservada>()
+
+            database_ref.child("tienda")
+                .child("cartas reservadas")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        snapshot.children.forEach{hijo : DataSnapshot ->
+                            val pojo_carta_reservada = hijo.getValue(CartaReservada::class.java)
+                            lista_cartas.add(pojo_carta_reservada!!)
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        println(error.message)
+                    }
+                })
+
+            return lista_cartas
+        }
+
         fun escribirCliente(db_ref: DatabaseReference, id: String, login:String, password:String, tipo:String, estado_notificacion: Int, user_notificacion: String)=
             db_ref.child("tienda").child("usuarios").child(id).setValue(Usuario(
                 id,
                 login,
                 password,
                 tipo,
+                estado_notificacion,
+                user_notificacion,
+            ))
+
+        fun escribirCartaReservada(db_ref: DatabaseReference, id: String, idcarta:String, idusuario:String, estado_c:String, imagen:String, estado_notificacion: Int, user_notificacion: String)=
+            db_ref.child("tienda").child("cartas compradas").child(id).setValue(CartaReservada(
+                id,
+                idcarta,
+                idusuario,
+                estado_c,
+                imagen,
                 estado_notificacion,
                 user_notificacion,
             ))

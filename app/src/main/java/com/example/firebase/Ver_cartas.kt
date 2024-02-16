@@ -147,6 +147,10 @@ class Ver_cartas : AppCompatActivity() {
 //                val intent3 = Intent(this, Editar_carta::class.java)
 //                startActivity(intent3)
 //            }
+            R.id.accion_crear_cartas -> {
+                val intent3 = Intent(this, Mi_cesta::class.java)
+                startActivity(intent3)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
