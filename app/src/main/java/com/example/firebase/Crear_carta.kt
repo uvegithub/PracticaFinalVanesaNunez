@@ -1,10 +1,14 @@
 package com.example.firebase
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.provider.Settings
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -39,9 +43,15 @@ class Crear_carta : AppCompatActivity(), CoroutineScope {
     private lateinit var lista_cartas: MutableList<Carta>
 
     private lateinit var job: Job
+
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var rol_usuario: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crear_carta)
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        rol_usuario = sharedPreferences.getString("usuario", "administrador").toString()
 
         val this_activity = this
         job = Job()
@@ -109,6 +119,9 @@ class Crear_carta : AppCompatActivity(), CoroutineScope {
                         applicationContext,
                         "Carta creada con exito"
                     )
+
+                    sharedPreferences.edit().putString("id_carta", id_generado.toString().trim()).apply()
+
                     val activity = Intent(applicationContext, Ver_cartas::class.java)
                     startActivity(activity)
                 }
@@ -141,4 +154,36 @@ class Crear_carta : AppCompatActivity(), CoroutineScope {
     }
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO + job
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        if(rol_usuario == "administrador"){
+            menuInflater.inflate(R.menu.menu_admin, menu)
+        }else{
+            menuInflater.inflate(R.menu.menu_user, menu)
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.accion_ver_cartas -> {
+                val intent = Intent(this, Ver_cartas::class.java)
+                startActivity(intent)
+            }
+            R.id.accion_crear_cartas -> {
+                val intent2 = Intent(this, Crear_carta::class.java)
+                startActivity(intent2)
+            }
+//            R.id.accion_editar_cartas -> {
+//                val intent3 = Intent(this, Editar_carta::class.java)
+//                startActivity(intent3)
+//            }
+            R.id.accion_crear_cartas -> {
+                val intent3 = Intent(this, Mi_cesta::class.java)
+                startActivity(intent3)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }

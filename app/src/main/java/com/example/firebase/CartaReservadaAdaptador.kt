@@ -3,15 +3,17 @@ package com.example.firebase
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Build
 import android.preference.PreferenceManager
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.ImageView
@@ -20,16 +22,34 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-class CartaReservadaAdaptador(var lista_cartas_reservadas: MutableList<CartaReservada>):
-    RecyclerView.Adapter<CartaReservadaAdaptador.CartaReservadaViewHolder>(), Filterable {
+class CartaReservadaAdaptador(
+    var lista_cartas_reservadas: MutableList<CartaReservada>,
+    var contentResolver: ContentResolver
+
+):
+    RecyclerView.Adapter<CartaReservadaAdaptador.CartaReservadaViewHolder>(), Filterable,
+    CoroutineScope {
     private lateinit var contexto: Context
-    private var lista_filtrada = lista_cartas_reservadas
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var rol_usuario: String
 
+    private lateinit var db_ref: DatabaseReference
+    private lateinit var storage_ref: StorageReference
+
     var canalId:Int = 0
+
+    private var url_carta: Uri? = null
+
+    private var lista_filtrada = lista_cartas_reservadas
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -47,22 +67,13 @@ class CartaReservadaAdaptador(var lista_cartas_reservadas: MutableList<CartaRese
     ) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(contexto)
 
-        val item_actual = lista_filtrada[position]
-        holder.id_c_reservada.text = item_actual.id_reserva_carta
-        holder.idcarta.text = item_actual.id_carta
-        holder.idusuario.text = item_actual.id_usuario
-        holder.estado_c.text = item_actual.estado
+//        val item_actual = lista_filtrada[position]
+//        holder.id_c_reservada.text = item_actual.id_reserva_carta
+//        holder.idcarta.text = item_actual.id_carta
+//        holder.idusuario.text = item_actual.id_usuario
+//        holder.estado_c.text = item_actual.estado
 
-        val URL: String? = when (item_actual.imagen) {
-            "" -> null
-            else -> item_actual.imagen
-        }
 
-        Glide.with(contexto)
-            .load(URL)
-            .apply(Utilidades.opcionesGlide(contexto))
-            .transition(Utilidades.transicion)
-            .into(holder.miniatura)
 
 
         rol_usuario = sharedPreferences.getString("usuario", "administrador").toString()
@@ -77,10 +88,37 @@ class CartaReservadaAdaptador(var lista_cartas_reservadas: MutableList<CartaRese
         holder.accept.setOnClickListener {
             if (holder.estado_c.text != "Preparado") {
                 mostrar_notificacion(contexto)
-                val activity = Intent(contexto, Mi_cesta::class.java)
-                activity.putExtra("carta_comprada", item_actual)
+
                 sharedPreferences.edit().putString("estado", "Preparado").apply()
 
+                var id_generado: String? = db_ref.child("tienda").child("cartas compradas").push().key
+
+                var id_carta = sharedPreferences.getString("id_carta", "").toString()
+                var id_usuario = sharedPreferences.getString("id_usuario", "").toString()
+                var estado = "Preparado"
+
+                sharedPreferences.edit().putString("id_carta_reservada", id_generado).apply()
+
+                val item_actual = lista_filtrada[position]
+
+                holder.id_c_reservada.text = id_generado
+                holder.idcarta.text = id_carta
+                holder.idusuario.text = id_usuario
+                holder.estado_c.text = "Preparado"
+
+                val URL: String? = when (item_actual.imagen) {
+                    "" -> null
+                    else -> item_actual.imagen
+                }
+
+                Glide.with(contexto)
+                    .load(URL)
+                    .apply(Utilidades.opcionesGlide(contexto))
+                    .transition(Utilidades.transicion)
+                    .into(holder.miniatura)
+
+//                val activity2 = Intent(contexto, Mi_cesta::class.java)
+//                activity2.putExtra("carta_comprada", item_actual)
 
             }
 
@@ -128,4 +166,7 @@ class CartaReservadaAdaptador(var lista_cartas_reservadas: MutableList<CartaRese
     override fun getFilter(): Filter {
         TODO("Not yet implemented")
     }
+
+    override val coroutineContext: CoroutineContext
+        get() = TODO("Not yet implemented")
 }

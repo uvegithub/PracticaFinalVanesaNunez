@@ -5,10 +5,8 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
@@ -77,10 +75,10 @@ class Mi_cesta : AppCompatActivity() {
 
             })
 
-        adaptador = CartaReservadaAdaptador(lista)
+        adaptador = CartaReservadaAdaptador(lista, contentResolver)
         recycler = findViewById(R.id.recycler)
         recycler.adapter = adaptador
-        recycler.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+        recycler.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         recycler.setHasFixedSize(true)
 
 
@@ -111,6 +109,10 @@ class Mi_cesta : AppCompatActivity() {
 //                val intent3 = Intent(this, Editar_carta::class.java)
 //                startActivity(intent3)
 //            }
+            R.id.accion_crear_cartas -> {
+                val intent3 = Intent(this, Mi_cesta::class.java)
+                startActivity(intent3)
+            }
         }
         return super.onOptionsItemSelected(item)
     }

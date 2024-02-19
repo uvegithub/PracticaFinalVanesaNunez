@@ -2,9 +2,11 @@ package com.example.firebase
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -16,13 +18,21 @@ import android.widget.ImageView
 import android.widget.Spinner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-class Ver_cartas : AppCompatActivity() {
+class Ver_cartas : AppCompatActivity(),
+    CoroutineScope {
 
     private lateinit var rol_usuario: String
 
@@ -39,6 +49,12 @@ class Ver_cartas : AppCompatActivity() {
 
     private lateinit var busqueda:EditText
     private lateinit var boton_busqueda:Button
+
+    private lateinit var storage_ref: StorageReference
+
+    private var url_carta: Uri? = null
+
+    private lateinit var job: Job
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ver_cartas)
@@ -55,6 +71,36 @@ class Ver_cartas : AppCompatActivity() {
         }
 
         imagen_cesta.setOnClickListener {
+
+            db_ref = FirebaseDatabase.getInstance().getReference()
+            storage_ref = FirebaseStorage.getInstance().getReference()
+
+            var id_generado: String? = db_ref.child("tienda").child("cartas compradas").push().key
+
+            var id_carta = sharedPreferences.getString("id_carta", "").toString()
+            var id_usuario = sharedPreferences.getString("id_usuario", "").toString()
+            var estado = "Preparado"
+
+            sharedPreferences.edit().putString("id_carta_reservada", id_generado).apply()
+
+            launch {
+                val url_carta_firebase =
+                    Utilidades.guardarImagenReservada(storage_ref, id_generado!!, url_carta!!)
+
+                val androidId =
+                    Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+
+                Utilidades.escribirCartaReservada(
+                    db_ref, id_generado!!,
+                    id_carta,
+                    id_usuario,
+                    estado,
+                    url_carta_firebase,
+                    Estado.CREADO,
+                    androidId)
+
+            }
+
             val activity = Intent(applicationContext, Mi_cesta::class.java)
             startActivity(activity)
         }
@@ -154,4 +200,7 @@ class Ver_cartas : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override val coroutineContext: CoroutineContext
+        get() = TODO("Not yet implemented")
 }

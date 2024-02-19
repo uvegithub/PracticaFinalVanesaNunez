@@ -100,6 +100,7 @@ class Registro_usuarios : AppCompatActivity(), CoroutineScope {
                     sharedPreferences.edit().putString("usuario","cliente").apply()
                     sharedPreferences.edit().putString("login_"+user_edit2.text.toString().trim(),user_edit2.text.toString().trim()).apply()
                     sharedPreferences.edit().putString("password_"+user_edit2.text.toString().trim(), contrasena_edit2.text.toString().trim()).apply()
+                    sharedPreferences.edit().putString("id_usuario", id_generado.toString().trim()).apply()
 
 
 

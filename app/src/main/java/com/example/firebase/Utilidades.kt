@@ -131,6 +131,15 @@ class Utilidades {
             return url_carta_firebase.toString()
         }
 
+        suspend fun guardarImagenReservada(sto_ref: StorageReference, id:String, imagen: Uri):String{
+            lateinit var url_carta_firebase: Uri
+
+            url_carta_firebase=sto_ref.child("tienda").child("cartas reservadas").child(id)
+                .putFile(imagen).await().storage.downloadUrl.await()
+
+            return url_carta_firebase.toString()
+        }
+
         fun tostadaCorrutina(activity: AppCompatActivity, contexto: Context, texto:String){
             activity.runOnUiThread{
                 Toast.makeText(
