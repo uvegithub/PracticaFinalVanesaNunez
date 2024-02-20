@@ -6,9 +6,9 @@
         android:title="Catalogo"
         app:showAsAction="never"
         />
-<!--    <item-->
-<!--        android:id="@+id/accion_editar"-->
-<!--        android:title="editar"-->
-<!--        app:showAsAction="never"-->
-<!--        />-->
+    <item
+        android:id="@+id/accion_ver_eventos"
+        android:title="Eventos"
+        app:showAsAction="never"
+        />
 </menu>

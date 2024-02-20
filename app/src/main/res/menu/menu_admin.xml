@@ -21,5 +21,15 @@
         android:title="Aceptar compra"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/accion_crear_evento"
+        android:title="Añadir evento"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/accion_ver_eventos"
+        android:title="Eventos"
+        app:showAsAction="never"
+        />
 
 </menu>

@@ -3,10 +3,12 @@ package com.example.firebase
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
 import android.preference.PreferenceManager
 import android.provider.Settings
@@ -23,11 +25,18 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
 class CartaAdaptador (var lista_cartas: MutableList<Carta>):
-    RecyclerView.Adapter<CartaAdaptador.CartaViewHolder>(), Filterable {
+    RecyclerView.Adapter<CartaAdaptador.CartaViewHolder>(), Filterable, CoroutineScope {
+    private lateinit var contentResolver: ContentResolver
     private lateinit var contexto: Context
     private var lista_filtrada = lista_cartas
 
@@ -35,6 +44,11 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
     private lateinit var rol_usuario: String
 
     var canalId:Int = 0
+
+    private lateinit var db_ref: DatabaseReference
+    private lateinit var storage_ref: StorageReference
+    private var url_carta: Uri? = null
+    private lateinit var job: Job
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -47,6 +61,9 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
 
     override fun onBindViewHolder(holder: CartaAdaptador.CartaViewHolder, position: Int) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(contexto)
+
+        val this_activity = this
+        job = Job()
 
         val item_actual = lista_filtrada[position]
         holder.nombre.text = item_actual.nombre
@@ -96,29 +113,42 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
                 activity.putExtra("carta_comprada", item_actual)
                 sharedPreferences.edit().putString("disponibilidad","No disponible").apply()
 
+                db_ref = FirebaseDatabase.getInstance().getReference()
+                storage_ref = FirebaseStorage.getInstance().getReference()
+
+                var id_generado: String? = db_ref.child("tienda").child("cartas compradas").push().key
+
+                var id_carta = sharedPreferences.getString("id_carta", "").toString()
+                var id_usuario = sharedPreferences.getString("id_usuario", "").toString()
+                var estado = "Preparado"
+
+                sharedPreferences.edit().putString("id_carta_reservada", id_generado).apply()
+
+                launch {
+                    val url_carta_firebase =
+                        Utilidades.guardarImagenReservada(storage_ref, id_generado!!, url_carta!!)
+
+                    val androidId =
+                        Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+
+                    Utilidades.escribirCartaReservada(
+                        db_ref, id_generado!!,
+                        id_carta,
+                        id_usuario,
+                        estado,
+                        url_carta_firebase,
+                        Estado.CREADO,
+                        androidId)
+                }
+
+
+
                 //Introducimos el item carta en carta_compradas de la BD
 
 
             }
 
         }
-
-//        holder.eliminar.setOnClickListener {
-//            val  db_ref = FirebaseDatabase.getInstance().getReference()
-//            val sto_ref = FirebaseStorage.getInstance().getReference()
-//
-//            val androidId =
-//                Settings.Secure.getString(contexto.contentResolver, Settings.Secure.ANDROID_ID)
-//
-//            lista_filtrada.remove(item_actual)
-//            sto_ref.child("tienda").child("cartas")
-//                .child(item_actual.id!!).delete()
-//            db_ref.child("tienda").child("cartas")
-//                .child(item_actual.id!!).removeValue()
-//
-//            Toast.makeText(contexto,"Carta borrada con exito", Toast.LENGTH_SHORT).show()
-//            Toast.makeText(contexto,"Carta borrada con exito", Toast.LENGTH_SHORT).show()
-//        }
 
     }
 
@@ -186,4 +216,7 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
             this?.notify(1,builder.build())
         }
     }
+
+    override val coroutineContext: CoroutineContext
+        get() = TODO("Not yet implemented")
 }

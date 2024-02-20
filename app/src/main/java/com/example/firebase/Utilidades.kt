@@ -25,6 +25,9 @@ class Utilidades {
             return cartas.any{ it.nombre!!.lowercase()==nombre.lowercase()}
         }
 
+        fun existeEvento(eventos : List<Evento>, nombre:String):Boolean{
+            return eventos.any{ it.nombre!!.lowercase()==nombre.lowercase()}
+        }
 
         fun obtenerListaClientes(database_ref: DatabaseReference):MutableList<Usuario>{
             var lista = mutableListOf<Usuario>()
@@ -66,6 +69,27 @@ class Utilidades {
                 })
 
             return lista_cartas
+        }
+
+        fun obtenerListaEventos(database_ref: DatabaseReference):MutableList<Evento>{
+            var lista_eventos = mutableListOf<Evento>()
+
+            database_ref.child("tienda")
+                .child("eventos")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        snapshot.children.forEach{hijo : DataSnapshot ->
+                            val pojo_evento = hijo.getValue(Evento::class.java)
+                            lista_eventos.add(pojo_evento!!)
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        println(error.message)
+                    }
+                })
+
+            return lista_eventos
         }
 
         fun obtenerListaCartasReservadas(database_ref: DatabaseReference):MutableList<CartaReservada>{
@@ -118,6 +142,17 @@ class Utilidades {
                 disponibilidad,
                 categoria,
                 url_firebase,
+                estado_notificacion,
+                user_notificacion,
+            ))
+
+        fun escribirEvento(db_ref: DatabaseReference, id: String, nombre:String, precio:Float, aforoMax:Int, aforoOcu:Int, estado_notificacion: Int, user_notificacion: String)=
+            db_ref.child("tienda").child("eventos").child(id).setValue(Evento(
+                id,
+                nombre,
+                precio,
+                aforoMax,
+                aforoOcu,
                 estado_notificacion,
                 user_notificacion,
             ))

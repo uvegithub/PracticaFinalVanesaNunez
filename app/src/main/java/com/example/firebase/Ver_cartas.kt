@@ -31,8 +31,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-class Ver_cartas : AppCompatActivity(),
-    CoroutineScope {
+class Ver_cartas : AppCompatActivity(){
 
     private lateinit var rol_usuario: String
 
@@ -54,7 +53,7 @@ class Ver_cartas : AppCompatActivity(),
 
     private var url_carta: Uri? = null
 
-    private lateinit var job: Job
+//    private lateinit var job: Job
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ver_cartas)
@@ -71,36 +70,6 @@ class Ver_cartas : AppCompatActivity(),
         }
 
         imagen_cesta.setOnClickListener {
-
-            db_ref = FirebaseDatabase.getInstance().getReference()
-            storage_ref = FirebaseStorage.getInstance().getReference()
-
-            var id_generado: String? = db_ref.child("tienda").child("cartas compradas").push().key
-
-            var id_carta = sharedPreferences.getString("id_carta", "").toString()
-            var id_usuario = sharedPreferences.getString("id_usuario", "").toString()
-            var estado = "Preparado"
-
-            sharedPreferences.edit().putString("id_carta_reservada", id_generado).apply()
-
-            launch {
-                val url_carta_firebase =
-                    Utilidades.guardarImagenReservada(storage_ref, id_generado!!, url_carta!!)
-
-                val androidId =
-                    Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
-
-                Utilidades.escribirCartaReservada(
-                    db_ref, id_generado!!,
-                    id_carta,
-                    id_usuario,
-                    estado,
-                    url_carta_firebase,
-                    Estado.CREADO,
-                    androidId)
-
-            }
-
             val activity = Intent(applicationContext, Mi_cesta::class.java)
             startActivity(activity)
         }
@@ -193,14 +162,22 @@ class Ver_cartas : AppCompatActivity(),
 //                val intent3 = Intent(this, Editar_carta::class.java)
 //                startActivity(intent3)
 //            }
-            R.id.accion_crear_cartas -> {
+            R.id.accion_aceptar_compra -> {
                 val intent3 = Intent(this, Mi_cesta::class.java)
                 startActivity(intent3)
+            }
+            R.id.accion_crear_evento -> {
+                val intent4 = Intent(this, CrearEvento::class.java)
+                startActivity(intent4)
+            }
+            R.id.accion_ver_eventos -> {
+                val intent5 = Intent(this, VerEventos::class.java)
+                startActivity(intent5)
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    override val coroutineContext: CoroutineContext
-        get() = TODO("Not yet implemented")
+//    override val coroutineContext: CoroutineContext
+//        get() = TODO("Not yet implemented")
 }

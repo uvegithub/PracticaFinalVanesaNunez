@@ -13,7 +13,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import com.bumptech.glide.Glide
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -23,36 +22,30 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import kotlin.coroutines.CoroutineContext
 
-class Editar_carta : AppCompatActivity(), CoroutineScope {
+class CrearEvento : AppCompatActivity(), CoroutineScope {
 
     private lateinit var nombre: TextInputEditText
     private lateinit var precio: TextInputEditText
-    private lateinit var disponibilidad: TextInputEditText
-    private lateinit var categoria: TextInputEditText
-    private lateinit var imagen: ImageView
-    private lateinit var beditar: Button
+    private lateinit var aforoMax: TextInputEditText
+    private lateinit var aforoOcu: TextInputEditText
+    private lateinit var bcrear: Button
     private lateinit var bvolver: Button
 
-    private var url_imagen: Uri? = null
+//    private var url_carta: Uri? = null
     private lateinit var database_ref: DatabaseReference
     private lateinit var storage_ref: StorageReference
-    private lateinit var lista_cartas: MutableList<Carta>
+    private lateinit var lista_eventos: MutableList<Evento>
 
     private lateinit var job: Job
-
-    private  lateinit var  pojo_carta:Carta
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var rol_usuario: String
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_editar_carta)
+        setContentView(R.layout.activity_crear_evento)
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         rol_usuario = sharedPreferences.getString("usuario", "administrador").toString()
@@ -60,87 +53,76 @@ class Editar_carta : AppCompatActivity(), CoroutineScope {
         val this_activity = this
         job = Job()
 
-        pojo_carta = intent.getParcelableExtra<Carta>("cartas")!!
-
-
-        nombre=findViewById(R.id.textinputedittextuNombre)
-        precio=findViewById(R.id.textinputedittextPrecio)
-        disponibilidad=findViewById(R.id.textinputedittextDisponibilidad)
-        categoria=findViewById(R.id.textinputedittextCategoria)
-        imagen=findViewById(R.id.imageView)
-
-        beditar=findViewById(R.id.button)
-        bvolver=findViewById(R.id.button_volver)
-
-        nombre.setText(pojo_carta.nombre)
-        precio.setText(pojo_carta.precio.toString())
-        disponibilidad.setText(pojo_carta.disponible)
-        categoria.setText(pojo_carta.categoria)
-
+        nombre=findViewById(R.id.textinputedittextNombreE)
+        precio=findViewById(R.id.textinputedittextPrecioE)
+        aforoMax=findViewById(R.id.textinputedittextAforoMaxE)
+        aforoOcu=findViewById(R.id.textinputedittextAforoOcuE)
+        bcrear=findViewById(R.id.buttonE)
+        bvolver=findViewById(R.id.button_volverE)
 
         database_ref = FirebaseDatabase.getInstance().getReference()
         storage_ref = FirebaseStorage.getInstance().getReference()
-        lista_cartas = Utilidades.obtenerListaCartas(database_ref)
+        lista_eventos = Utilidades.obtenerListaEventos(database_ref)
 
-        Glide.with(applicationContext)
-            .load(pojo_carta.imagen)
-            .apply(Utilidades.opcionesGlide(applicationContext))
-            .transition(Utilidades.transicion)
-            .into(imagen)
-
-        beditar.setOnClickListener {
+        bcrear.setOnClickListener {
 
 //            val dateTime = LocalDateTime.now()
 //                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
             if (nombre.text.toString().trim().isEmpty() ||
                 precio.text.toString().trim().isEmpty() ||
-                disponibilidad.text.toString().trim().isEmpty() ||
-                categoria.text.toString().trim().isEmpty()
+                aforoMax.text.toString().trim().isEmpty() ||
+                aforoOcu.text.toString().trim().isEmpty()
             ) {
                 Toast.makeText(
                     applicationContext, "Faltan datos en el " +
                             "formulario", Toast.LENGTH_SHORT
                 ).show()
 
-            } else if ( !nombre.text.toString().trim().equals(pojo_carta.nombre) && Utilidades.existeCarta(lista_cartas, nombre.text.toString().trim())) {
+//            } else if (url_carta == null) {
+//                Toast.makeText(
+//                    applicationContext, "Falta seleccionar el " +
+//                            "escudo", Toast.LENGTH_SHORT
+//                ).show()
+            } else if (Utilidades.existeEvento(lista_eventos, nombre.text.toString().trim())) {
                 Toast.makeText(applicationContext, "Esa carta ya existe", Toast.LENGTH_SHORT)
                     .show()
             } else {
 
+                var id_generado: String? = database_ref.child("tienda").child("eventos").push().key
+//                sharedPreferences.edit().putString("id_evento", id_generado.toString().trim()).apply()
+
                 //GlobalScope(Dispatchers.IO)
-                var url_imagen_firebase = String()
                 launch {
-                    if(url_imagen == null){
-                        url_imagen_firebase = pojo_carta.imagen!!
-                    }else{
-                        val url_imagen_firebase =
-                            Utilidades.guardarImagen(storage_ref, pojo_carta.id!!, url_imagen!!)
-                    }
+//                    val url_carta_firebase =
+//                        Utilidades.guardarImagen(storage_ref, id_generado!!, url_carta!!)
 
                     val androidId =
                         Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
 
-                    Utilidades.escribirCarta(
-                        database_ref, pojo_carta.id!!,
+                    Utilidades.escribirEvento(
+                        database_ref, id_generado!!,
                         nombre.text.toString().trim(),
                         precio.text.toString().trim().toFloat(),
-                        disponibilidad.text.toString().trim(),
-                        categoria.text.toString().trim(),
-                        url_imagen_firebase,
-                        Estado.MODIFICADO,
-                        androidId
-                    )
+                        aforoMax.text.toString().trim().toInt(),
+                        aforoOcu.text.toString().trim().toInt(),
+//                        url_carta_firebase,
+                        Estado.CREADO,
+                        androidId)
+
                     Utilidades.tostadaCorrutina(
                         this_activity,
                         applicationContext,
-                        "Carta modificada con exito"
+                        "Evento creado con exito"
                     )
+
+                    sharedPreferences.edit().putString("id_evento", id_generado.toString().trim()).apply()
+
                     val activity = Intent(applicationContext, Ver_cartas::class.java)
                     startActivity(activity)
                 }
-            }
 
+            }
         }
 
         bvolver.setOnClickListener {
@@ -148,10 +130,10 @@ class Editar_carta : AppCompatActivity(), CoroutineScope {
             startActivity(activity)
         }
 
-        imagen.setOnClickListener {
-            accesoGaleria.launch("image/*")
-        }
-
+//        imagen.setOnClickListener {
+//            accesoGaleria.launch("image/*")
+//
+//        }
     }
 
     override fun onDestroy() {
@@ -159,16 +141,13 @@ class Editar_carta : AppCompatActivity(), CoroutineScope {
         super.onDestroy()
     }
 
-    private val accesoGaleria = registerForActivityResult(ActivityResultContracts.GetContent())
-    {uri: Uri ->
-        if(uri!=null){
-            url_imagen = uri
-            imagen.setImageURI(uri)
-        }
-
-
-    }
-
+//    private val accesoGaleria = registerForActivityResult(ActivityResultContracts.GetContent())
+//    { uri: Uri ->
+//        if (uri != null) {
+//            url_carta = uri
+//            imagen.setImageURI(uri)
+//        }
+//    }
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO + job
 

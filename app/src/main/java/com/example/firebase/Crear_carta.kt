@@ -179,9 +179,17 @@ class Crear_carta : AppCompatActivity(), CoroutineScope {
 //                val intent3 = Intent(this, Editar_carta::class.java)
 //                startActivity(intent3)
 //            }
-            R.id.accion_crear_cartas -> {
+            R.id.accion_aceptar_compra -> {
                 val intent3 = Intent(this, Mi_cesta::class.java)
                 startActivity(intent3)
+            }
+            R.id.accion_crear_evento -> {
+                val intent4 = Intent(this, CrearEvento::class.java)
+                startActivity(intent4)
+            }
+            R.id.accion_ver_eventos -> {
+                val intent5 = Intent(this, VerEventos::class.java)
+                startActivity(intent5)
             }
         }
         return super.onOptionsItemSelected(item)
