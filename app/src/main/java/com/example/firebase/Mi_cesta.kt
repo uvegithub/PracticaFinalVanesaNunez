@@ -63,6 +63,7 @@ class Mi_cesta : AppCompatActivity() {
                     snapshot.children.forEach{hijo: DataSnapshot?
                         ->
                         val pojo_carta_reservada = hijo?.getValue(CartaReservada::class.java)
+//                        val pojo_carta_reservada = intent.getParcelableExtra<CartaReservada>("carta_comprada")
                         lista.add(pojo_carta_reservada!!)
                     }
                     recycler.adapter?.notifyDataSetChanged()

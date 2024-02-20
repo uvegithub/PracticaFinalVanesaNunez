@@ -90,13 +90,14 @@ class CartaReservadaAdaptador(
 
                 sharedPreferences.edit().putString("estado", "Preparado").apply()
 
-                var id_generado: String? = db_ref.child("tienda").child("cartas compradas").push().key
+//                var id_generado: String? = db_ref.child("tienda").child("cartas compradas").push().key
 
+                var id_generado = sharedPreferences.getString("id_carta_reservada", "1").toString()
                 var id_carta = sharedPreferences.getString("id_carta", "").toString()
                 var id_usuario = sharedPreferences.getString("id_usuario", "").toString()
                 var estado = "Preparado"
 
-                sharedPreferences.edit().putString("id_carta_reservada", id_generado).apply()
+//                sharedPreferences.edit().putString("id_carta_reservada", id_generado).apply()
 
                 val item_actual = lista_filtrada[position]
 
