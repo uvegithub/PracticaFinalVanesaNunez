@@ -40,9 +40,9 @@ class Mi_cesta : AppCompatActivity() {
 
         db_ref = FirebaseDatabase.getInstance().getReference()
         storage_ref = FirebaseStorage.getInstance().getReference()
-        lista_cartas_compradas = Utilidades.obtenerListaCartasReservadas(db_ref)
+//        lista_cartas_compradas = Utilidades.obtenerListaCartasReservadas(db_ref)
 
-        var id_generado: String? = db_ref.child("tienda").child("cartas compradas").push().key
+//        var id_generado: String? = db_ref.child("tienda").child("cartas_compradas").push().key
 //        Utilidades.escribirCartaReservada(
 //            db_ref, id_generado!!,
 //            idcarta.text.toString().trim(),
@@ -54,10 +54,9 @@ class Mi_cesta : AppCompatActivity() {
 //            androidId)
 
         lista = mutableListOf()
-        db_ref = FirebaseDatabase.getInstance().getReference()
 
         db_ref.child("tienda")
-            .child("cartas compradas")
+            .child("cartas_compradas")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     lista.clear()

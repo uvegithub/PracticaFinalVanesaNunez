@@ -33,7 +33,6 @@ import kotlin.coroutines.CoroutineContext
 class CartaReservadaAdaptador(
     var lista_cartas_reservadas: MutableList<CartaReservada>,
     var contentResolver: ContentResolver
-
 ):
     RecyclerView.Adapter<CartaReservadaAdaptador.CartaReservadaViewHolder>(), Filterable,
     CoroutineScope {

@@ -12,6 +12,7 @@ import android.net.Uri
 import android.os.Build
 import android.preference.PreferenceManager
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,13 +31,14 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 class CartaAdaptador (var lista_cartas: MutableList<Carta>):
-    RecyclerView.Adapter<CartaAdaptador.CartaViewHolder>(), Filterable, CoroutineScope {
-    private lateinit var contentResolver: ContentResolver
+    RecyclerView.Adapter<CartaAdaptador.CartaViewHolder>(), Filterable {
     private lateinit var contexto: Context
     private var lista_filtrada = lista_cartas
 
@@ -62,6 +64,7 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
     override fun onBindViewHolder(holder: CartaAdaptador.CartaViewHolder, position: Int) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(contexto)
 
+
         val this_activity = this
         job = Job()
 
@@ -69,7 +72,7 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
         holder.nombre.text = item_actual.nombre
         holder.precio.text = item_actual.precio.toString()
         holder.categoria.text = item_actual.categoria
-        holder.disponibilidad.text = sharedPreferences.getString("disponibilidad",item_actual.disponible)
+        holder.disponibilidad.text = item_actual.disponible
 
         var euro=item_actual.precio
         var dolar:Float = euro!!.toFloat() * 1.07f
@@ -108,44 +111,46 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
 
         holder.imagen_comprar.setOnClickListener {
             if(holder.disponibilidad.text!="No disponible"){
-                mostrar_notificacion(contexto)
-                val activity = Intent(contexto,Mi_cesta::class.java)
-                activity.putExtra("carta_comprada", item_actual)
-                sharedPreferences.edit().putString("disponibilidad","No disponible").apply()
+                Log.d("IF", "DISPONIBLE")
+//                holder.disponibilidad.text = "No disponible"
+
+                //mostrar_notificacion(contexto)
+//                val activity = Intent(contexto,Mi_cesta::class.java)
+//                activity.putExtra("carta_comprada", item_actual)
+                //sharedPreferences.edit().putString("disponibilidad","No disponible").apply()
+
 
                 db_ref = FirebaseDatabase.getInstance().getReference()
                 storage_ref = FirebaseStorage.getInstance().getReference()
 
-                var id_generado: String? = db_ref.child("tienda").child("cartas compradas").push().key
+                var id_generado: String? = db_ref.child("tienda").child("cartas_compradas").push().key
 
-                var id_carta = sharedPreferences.getString("id_carta", "").toString()
-                var id_usuario = sharedPreferences.getString("id_usuario", "").toString()
+
+                var id_carta = item_actual.id
+                var id_usuario = sharedPreferences.getString("id_usuario", "1").toString()
                 var estado = "Preparado"
 
+
                 sharedPreferences.edit().putString("id_carta_reservada", id_generado).apply()
+                val androidId =
+                    Settings.Secure.getString(contexto.contentResolver, Settings.Secure.ANDROID_ID)
 
-                launch {
-                    val url_carta_firebase =
-                        Utilidades.guardarImagenReservada(storage_ref, id_generado!!, url_carta!!)
-
-                    val androidId =
-                        Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+                GlobalScope.launch(Dispatchers.IO) {
+//                    val url_carta_firebase =
+//                        Utilidades.guardarImagenReservada(storage_ref, id_generado!!, url_carta!!)
 
                     Utilidades.escribirCartaReservada(
                         db_ref, id_generado!!,
-                        id_carta,
+                        id_carta!!,
                         id_usuario,
                         estado,
-                        url_carta_firebase,
                         Estado.CREADO,
                         androidId)
                 }
 
 
-
-                //Introducimos el item carta en carta_compradas de la BD
-
-
+            }else{
+                Log.d("ELSE", "NO DISPONIBLE")
             }
 
         }
@@ -217,6 +222,4 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
         }
     }
 
-    override val coroutineContext: CoroutineContext
-        get() = TODO("Not yet implemented")
 }

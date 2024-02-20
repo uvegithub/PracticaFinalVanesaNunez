@@ -96,7 +96,7 @@ class Utilidades {
             var lista_cartas = mutableListOf<CartaReservada>()
 
             database_ref.child("tienda")
-                .child("cartas reservadas")
+                .child("cartas_reservadas")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         snapshot.children.forEach{hijo : DataSnapshot ->
@@ -123,13 +123,12 @@ class Utilidades {
                 user_notificacion,
             ))
 
-        fun escribirCartaReservada(db_ref: DatabaseReference, id: String, idcarta:String, idusuario:String, estado_c:String, imagen:String, estado_notificacion: Int, user_notificacion: String)=
-            db_ref.child("tienda").child("cartas compradas").child(id).setValue(CartaReservada(
+        fun escribirCartaReservada(db_ref: DatabaseReference, id: String, idcarta:String, idusuario:String, estado_c:String, estado_notificacion: Int, user_notificacion: String)=
+            db_ref.child("tienda").child("cartas_compradas").child(id).setValue(CartaReservada(
                 id,
                 idcarta,
                 idusuario,
                 estado_c,
-                imagen,
                 estado_notificacion,
                 user_notificacion,
             ))
@@ -169,7 +168,7 @@ class Utilidades {
         suspend fun guardarImagenReservada(sto_ref: StorageReference, id:String, imagen: Uri):String{
             lateinit var url_carta_firebase: Uri
 
-            url_carta_firebase=sto_ref.child("tienda").child("cartas reservadas").child(id)
+            url_carta_firebase=sto_ref.child("tienda").child("cartas_reservadas").child(id)
                 .putFile(imagen).await().storage.downloadUrl.await()
 
             return url_carta_firebase.toString()

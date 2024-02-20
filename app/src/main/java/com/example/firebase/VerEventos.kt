@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.StorageReference
 import kotlinx.coroutines.Job
@@ -30,12 +32,18 @@ class VerEventos : AppCompatActivity() {
     private lateinit var adaptador: EventoAdaptador
     private lateinit var db_ref: DatabaseReference
 
-    private lateinit var storage_ref: StorageReference
+//    private lateinit var storage_ref: StorageReference
 
 //    private lateinit var job: Job
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ver_eventos)
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        rol_usuario = sharedPreferences.getString("usuario", "administrador").toString()
+
+        lista = mutableListOf()
+        db_ref = FirebaseDatabase.getInstance().getReference()
 
         db_ref.child("tienda")
             .child("eventos")
@@ -53,7 +61,6 @@ class VerEventos : AppCompatActivity() {
                 override fun onCancelled(error: DatabaseError) {
                     println(error.message)
                 }
-
             })
 
         adaptador = EventoAdaptador(lista)
