@@ -112,11 +112,11 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
         holder.imagen_comprar.setOnClickListener {
             if(holder.disponibilidad.text!="No disponible"){
                 Log.d("IF", "DISPONIBLE")
-//                holder.disponibilidad.text = "No disponible"
+                holder.disponibilidad.text = "No disponible"
 
                 //mostrar_notificacion(contexto)
-//                val activity = Intent(contexto,Mi_cesta::class.java)
-//                activity.putExtra("carta_comprada", item_actual)
+            //    val activity = Intent(contexto,Mi_cesta::class.java)
+             //   activity.putExtra("carta_comprada", item_actual)
                 //sharedPreferences.edit().putString("disponibilidad","No disponible").apply()
 
 
@@ -127,11 +127,13 @@ class CartaAdaptador (var lista_cartas: MutableList<Carta>):
 
 
                 var id_carta = item_actual.id
-                var id_usuario = sharedPreferences.getString("id_usuario", "1").toString()
-                var estado = "Preparado"
+                var id_usuario = sharedPreferences.getString("id_usuario", "").toString()
+                Log.d("HOLAAAA", id_usuario.toString())
+                var estado = "Pendiente"
 
 
                 sharedPreferences.edit().putString("id_carta_reservada", id_generado).apply()
+                sharedPreferences.edit().putString("id_carta", id_carta).apply()
                 val androidId =
                     Settings.Secure.getString(contexto.contentResolver, Settings.Secure.ANDROID_ID)
 

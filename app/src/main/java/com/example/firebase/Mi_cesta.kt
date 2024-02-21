@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,8 +15,14 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.getValue
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.util.Objects
+import java.util.concurrent.CountDownLatch
 
 class Mi_cesta : AppCompatActivity() {
 
@@ -60,13 +67,51 @@ class Mi_cesta : AppCompatActivity() {
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     lista.clear()
-                    snapshot.children.forEach{hijo: DataSnapshot?
-                        ->
-                        val pojo_carta_reservada = hijo?.getValue(CartaReservada::class.java)
+                    GlobalScope.launch(Dispatchers.IO) {
+                        snapshot.children.forEach { hijo: DataSnapshot? ->
+                            val pojo_carta_reservada = hijo?.getValue(CartaReservada::class.java)
+                            Log.d("IDDDDDDD", pojo_carta_reservada!!.id_usuario.toString() )
+
+                            var semaforo = CountDownLatch(2)
+
+                            db_ref.child("tienda").child("cartas")
+                                .child(pojo_carta_reservada!!.id_carta!!)
+                                .addValueEventListener(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        val pojo_carta = snapshot.getValue(Carta::class.java)
+                                        pojo_carta_reservada.imagen = pojo_carta!!.imagen
+                                        semaforo.countDown()
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        TODO("Not yet implemented")
+                                    }
+                                })
+
+                            db_ref.child("tienda").child("usuarios")
+                                .child(pojo_carta_reservada!!.id_usuario!!)
+                                .addValueEventListener(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        val pojo_user= snapshot.getValue(Usuario::class.java)
+                                        Log.d("TIENEEEE", pojo_carta_reservada.id_usuario.toString() )
+                                        pojo_carta_reservada.userComprador = pojo_user!!.login
+                                        semaforo.countDown()
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
+                                        TODO("Not yet implemented")
+                                    }
+                                })
+
+
 //                        val pojo_carta_reservada = intent.getParcelableExtra<CartaReservada>("carta_comprada")
-                        lista.add(pojo_carta_reservada!!)
+                            semaforo.await()
+                            lista.add(pojo_carta_reservada!!)
+                        }
+                        runOnUiThread {
+                            recycler.adapter?.notifyDataSetChanged()
+                        }
                     }
-                    recycler.adapter?.notifyDataSetChanged()
                 }
 
                 override fun onCancelled(error: DatabaseError) {

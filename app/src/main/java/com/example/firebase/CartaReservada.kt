@@ -12,4 +12,5 @@ data class CartaReservada(
     var estado_notificacion:Int? = null,
     var user_notificacion:String? = null,
     var imagen: String? = "",
+    var userComprador: String? = "",
 ): Parcelable

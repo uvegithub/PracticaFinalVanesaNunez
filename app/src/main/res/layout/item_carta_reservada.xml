@@ -21,31 +21,22 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/id_carta_reservada"
+            android:id="@+id/carta_reservada"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imagen_defecto"
-            android:text="id carta reservada: "
+            android:text="carta reservada: "
             android:textSize="16sp"
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/id_carta"
+            android:id="@+id/user_comprador"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/id_carta_reservada"
-            android:text="id carta: "
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/id_usuario"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/id_carta"
-            android:text="id usuario: "
+            app:layout_constraintTop_toBottomOf="@+id/carta_reservada"
+            android:text="comprador"
             android:textSize="16sp" />
 
         <TextView
@@ -53,13 +44,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/id_usuario"
-            android:text="En preparación"
+            app:layout_constraintTop_toBottomOf="@+id/user_comprador"
+            android:text="estado"
             android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/icono_aceptar"
             android:layout_width="50dp"
+            android:layout_marginTop="10dp"
             android:layout_height="50dp"
             android:src="@drawable/aceptar"
             app:layout_constraintStart_toStartOf="parent"

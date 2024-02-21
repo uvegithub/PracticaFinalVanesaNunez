@@ -92,18 +92,17 @@ class CartaReservadaAdaptador(
 
 //                var id_generado: String? = db_ref.child("tienda").child("cartas compradas").push().key
 
-                var id_generado = sharedPreferences.getString("id_carta_reservada", "1").toString()
-                var id_carta = sharedPreferences.getString("id_carta", "").toString()
-                var id_usuario = sharedPreferences.getString("id_usuario", "").toString()
+                var id_generado = sharedPreferences.getString("id_carta_reservada", "1r").toString()
+                var id_carta = sharedPreferences.getString("id_carta", "1c").toString()
+                var id_usuario = sharedPreferences.getString("id_usuario", "1u").toString()
                 var estado = "Preparado"
 
 //                sharedPreferences.edit().putString("id_carta_reservada", id_generado).apply()
 
                 val item_actual = lista_filtrada[position]
 
-                holder.id_c_reservada.text = id_generado
-                holder.idcarta.text = id_carta
-                holder.idusuario.text = id_usuario
+
+                holder.user.text = item_actual.userComprador
                 holder.estado_c.text = "Preparado"
 
                 val URL: String? = when (item_actual.imagen) {
@@ -130,9 +129,7 @@ class CartaReservadaAdaptador(
 
     class CartaReservadaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val miniatura: ImageView = itemView.findViewById(R.id.imagen_defecto)
-        val id_c_reservada: TextView = itemView.findViewById(R.id.id_carta_reservada)
-        val idcarta: TextView = itemView.findViewById(R.id.id_carta)
-        val idusuario: TextView = itemView.findViewById(R.id.id_usuario)
+        val user: TextView = itemView.findViewById(R.id.user_comprador)
         val estado_c: TextView = itemView.findViewById(R.id.estado)
         val accept: ImageView = itemView.findViewById(R.id.icono_aceptar)
     }
